@@ -1,0 +1,222 @@
+# dependencies
+
+# super + p - lock system
+# super + e - open terminal emulator
+# super + shift + e - open file manager
+# super + s - run dmenu
+# super + d - browser
+# super + shift + d - browser private mode
+# XF86AudioMute - volume mute/unmute (fn + f1)
+# XF86AudioLowerVolume - volume down (fn + f2)
+# XF86AudioRaiseVolume - volume up (fn + f3)
+# XF86MonBrightnessDown - brightness down (fn + f4)
+# XF86MonBrightnessUp - brightness up (fn + f5)
+# Print - screenshot to directory
+# super + shift + s - flameshot
+# super + z - set keyboard language to us
+# super + x - set keyboard language to ua
+# super + c - set keyboard language to ru
+# super + h - hide polybar
+# super + {F12, r} - quit/restart bspwm
+# super + ctrl + r - restart sxhkd
+# super + shift + r - restart polybar
+# super + {w, q} - close/kill window
+# super + m - alternate between the tiled and monocle layout
+# super + g - swap the current node and the biggest window
+# super + ctrl + {j, k, l, semicolon} - swap the current node and the node in the given direction
+# super + {t, shift + t, f, shift + f} - set the window state
+# super + {comma, period} - rotate tree
+# super + space - emergency screen
+# super + {j, k, l, semicolon} - focus the node in the given direction
+# super + {shift + Tab, Tab} - cycle windows in monocle mode
+# super + {_, shift +}{1-9, grave} - focus or send to the given desktop
+# super + {u, p} - focus the next/previous desktop in the current monitor
+# super + ctrl + shift + {j, k, l, semicolon} - preselect the direction
+# super + ctrl + space - cancel the preselection for the focused node
+# super + ctrl + shift + space - cancel the preselection for the focused desktop
+# super + ctrl + m - move window to preselected area
+# super + alt + {j, k, l, semicolon} - expand a window by moving one of its side outward
+# super + alt + shift + {j, k, l, semicolon} - contract a window by moving one of its side inward
+# super + shift + {j, k, l, semicolon} - move a floating window
+
+# super + p - lock system
+# super + p
+#     dm-tool lock
+#     # systemctl suspend
+#     # loginctl lock-session
+
+# super + e - open terminal emulator
+super + e
+    kitty -1
+
+# super + shift + e - open file manager
+super + shift + e
+    thunar
+
+# super + s - run dmenu
+super + s
+    dmenu_run_custom
+
+# super + d - browser
+super + d
+    vivaldi
+
+# XF86AudioMute - volume mute/unmute (fn + f1)
+XF86AudioMute
+    pactl set-sink-mute @DEFAULT_SINK@ toggle
+
+# XF86AudioLowerVolume - volume down (fn + f2)
+XF86AudioLowerVolume
+    pactl set-sink-volume 0 -5%
+
+# XF86AudioRaiseVolume - volume up (fn + f3)
+XF86AudioRaiseVolume
+    pactl set-sink-volume 0 +5%
+
+XF86AudioMicMute
+    pactl set-source-mute @DEFAULT_SOURCE@ toggle
+
+# XF86MonBrightnessDown - brightness down (fn + f4)
+XF86MonBrightnessDown
+    brightnessctl set 10%-
+
+# XF86MonBrightnessUp - brightness up (fn + f5)
+XF86MonBrightnessUp
+    brightnessctl set +10%
+
+# Print - screenshot to directory
+Print
+    flameshot full -c -p /home/morye/Pictures/Screenshots/
+
+# super + shift + s - flameshot
+super + shift + s
+    flameshot gui
+
+# super + z - set keyboard language to us
+super + z
+    xkb-switch -s us
+
+# super + x - set keyboard language to ua
+super + x
+    xkb-switch -s ua
+
+# super + c - set keyboard language to ru
+super + c
+    xkb-switch -s ru
+
+# super + h - hide polybar
+super + h
+    ~/.local/bin/polybar_toggle.sh
+
+#
+# bspwm hotkeys
+#
+
+# super + {F12, r} - quit/restart bspwm
+super + {F12, r}
+    bspc {quit, wm -r}
+
+# super + ctrl + r - restart sxhkd
+super + ctrl + r
+    pkill -x sxhkd; sxhkd &
+
+# super + shift + r - restart polybar
+super + shift + r
+    pkill polybar && polybar main
+
+# super + {w, q} - close/kill window
+super + {w, q}
+    bspc node {-c, --kill}
+
+#
+# windows
+#
+
+
+# super + m - alternate between the tiled and monocle layout
+super + m
+    bspc desktop -l next
+
+# super + g - swap the current node and the biggest window
+super + g
+    bspc node -s biggest.window.local
+
+# super + ctrl + {j, k, l, semicolon} - swap the current node and the node in the given direction
+super + ctrl + {j, k, l, semicolon}
+    bspc node -s {west, south, north, east}
+
+# super + {t, shift + t, f, shift + f} - set the window state
+super + {t, shift + t, f, shift + f}
+    bspc node -t {tiled, pseudo_tiled, fullscreen, floating}
+
+# super + {comma, period} - rotate tree
+super + {comma, period}
+    bspc node @parent -R {-90, 90}
+
+# super + space - emergency screen
+super + space
+    feh -F /home/morye/emergency-screen.png
+
+#
+# focus/swap
+#
+
+# super + {j, k, l, semicolon} - focus the node in the given direction
+super + {j, k, l, semicolon}
+    bspc node -f {west, south, north, east}
+
+# super + {shift + Tab, Tab} - cycle windows in monocle mode
+super + {shift + Tab, Tab}
+    bspc node -f {prev, next}.local.window
+
+# super + {_, shift +}{1-9, grave} - focus or send to the given desktop
+super + {_, shift +}{1-9, grave}
+    bspc {desktop -f, node -d} '^{1-9, 10}'
+
+# super + {u, p} - focus the next/previous desktop in the current monitor
+super + {u, p}
+    bspc desktop -f {prev, next}.local
+
+# (?) focus the last node/desktop
+# super + {semicolon, apostrophe}
+#     bspc {node, desktop} -f last
+
+#
+# preselect
+#
+
+# super + ctrl + shift + {j, k, l, semicolon} - preselect the direction
+super + ctrl + shift + {j, k, l, semicolon}
+    bspc node -p {west, south, north, east}
+
+# (?) preselect the ratio
+# super + ctrl + {1-9}
+#     bspc node -o 0.{1-9}
+
+# super + ctrl + space - cancel the preselection for the focused node
+super + ctrl + space
+    bspc node -p cancel
+
+# super + ctrl + shift + space - cancel the preselection for the focused desktop
+super + ctrl + shift + space
+    bspc query -N -d | xargs -I id -n 1 bspc node id -p cancel
+
+# super + ctrl + m - move window to preselected area
+super + ctrl + m
+    bspc node -n last.!automatic
+
+#
+# move/resize
+#
+
+# super + alt + {j, k, l, semicolon} - expand a window by moving one of its side outward
+super + alt + {j, k, l, semicolon}
+    bspc node -z {left -20 0, bottom 0 20, top 0 -20, right 20 0}
+
+# super + alt + shift + {j, k, l, semicolon} - contract a window by moving one of its side inward
+super + alt + shift + {j, k, l, semicolon}
+    bspc node -z {right -20 0, top 0 20, bottom 0 -20, left 20 0}
+
+# super + shift + {j, k, l, semicolon} - move a floating window
+super + shift + {j, k, l, semicolon}
+    bspc node -v {-20 0, 0 20, 0 -20, 20 0}
